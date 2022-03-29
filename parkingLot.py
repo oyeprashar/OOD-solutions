@@ -7,39 +7,32 @@ https://www.educative.io/courses/grokking-the-object-oriented-design-interview/g
 https://leetcode.com/discuss/interview-question/124739/Parking-Lot-Design-Using-OO-Design
 
 1. Requirement (what and why) gathering and use cases:
+
     -> We will assume that the first slot on each floor will be for a truck, the next 2 for bikes, and all the other slots for cars.
     -> The ticket id would be of the following format: <parking_lot_id>_<floor_no>_<slot_no> PR1234_2_5 (denotes 5th slot of 2nd floor of parking lot PR1234)
-
     1. create_parking_lot
         Created parking lot with <no_of_floors> floors and <no_of_slots_per_floor> slots per floor
-
     2. park_vehicle
         Parked vehicle. Ticket ID: <ticket_id>
         Print "Parking Lot Full" if slot is not available for that vehicle type.
-
     3. unpark_vehicle
         Unparked vehicle with Registration Number: <reg_no> and Color: <color>
         Print "Invalid Ticket" if ticket is invalid or parking slot is not occupied.
-
     4. display free_count <vehicle_type>
         No. of free slots for <vehicle_type> on Floor <floor_no>: <no_of_free_slots>
         The above will be printed for each floor.
-
     5. display free_slots <vehicle_type>
         Free slots for <vehicle_type> on Floor <floor_no>: <comma_separated_values_of_slot_nos>
         The above will be printed for each floor.
-
     6. display occupied_slots <vehicle_type>
         Occupied slots for <vehicle_type> on Floor <floor_no>: <comma_separated_values_of_slot_nos>
         The above will be printed for each floor.
-
 
 2. Identifying the entities and services:
     Entities:
         a. Parking-lot -> the lot itself
         b. Vehicle -> registration number, color
         c. Ticket
-
     Services:
         a. ParkinglotManager
 
@@ -49,33 +42,17 @@ https://leetcode.com/discuss/interview-question/124739/Parking-Lot-Design-Using-
 
 from abc import ABC, abstractmethod,abstractproperty
 
-class Vehicle(ABC):
+class Vehicle():
 
-
-    @property
-    @abstractmethod
-    def color(self):
-        pass
-
-    @property
-    @abstractmethod
-    def regNum(self):
-        pass
-
-
-    @property
-    @abstractmethod
-    def type(self):
-        pass
-
+    def __init__(self,color,regNum,type):
+        self.color = color
+        self.regNum = regNum
+        self.type = type
 
 class Car(Vehicle):
 
-
-    def __init__(self,_color,_regNum,_type):
-        self._color = _color
-        self._regNum = _regNum
-        self._type = _type
+    def __init__(self,color,regNum,type):
+        super().__init__(color,regNum,type)
 
     def getColor(self):
         return self.color
@@ -85,27 +62,12 @@ class Car(Vehicle):
 
     def getType(self):
         return self.type
-
-    @property
-    def color(self):
-        return self._color
-
-    @property
-    def regNum(self):
-        return self._regNum
-
-
-    @property
-    def type(self):
-        return self._type
 
 
 class Bike(Vehicle):
 
-    def __init__(self,_color,_regNum,_type):
-        self._color = _color
-        self._regNum = _regNum
-        self._type = _type
+    def __init__(self,color,regNum,type):
+        super().__init__(color,regNum,type)
 
     def getColor(self):
         return self.color
@@ -115,27 +77,11 @@ class Bike(Vehicle):
 
     def getType(self):
         return self.type
-
-
-    @property
-    def color(self):
-        return self._color
-
-    @property
-    def regNum(self):
-        return self._regNum
-
-
-    @property
-    def type(self):
-        return self._type
 
 def Truck(Vehicle):
 
-    def __init__(self,_color,_regNum,_type):
-        self._color = _color
-        self._regNum = _regNum
-        self._type = _type
+    def __init__(self,color,regNum,type):
+        super().__init__(color,regNum,type)
 
     def getColor(self):
         return self.color
@@ -145,20 +91,6 @@ def Truck(Vehicle):
 
     def getType(self):
         return self.type
-
-
-    @property
-    def color(self):
-        return self._color
-
-    @property
-    def regNum(self):
-        return self._regNum
-
-
-    @property
-    def type(self):
-        return self._type
 
 # this should be singleton pattern
 # Factory parttern used
