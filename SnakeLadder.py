@@ -162,6 +162,30 @@ class GameManager(AbstractGameManager):
 	def validate(self,newCell,board):
 		return newCell <= board.getMaxCell()
 
+	def move(self,currPlayer,board,dice):
+
+		diceJump = dice.roll()
+
+		newPos = currPlayer.getPosition() + diceJump
+		oldPos = currPlayer.getPosition()
+
+		if newPos in board.getSpecialMoves():
+			newPos = board.getSpecialMoves()[newPos]
+
+		if newPos > board.getMaxCell(): 
+			print("Invalid move try again!")
+			return
+
+		elif newPos < board.getMaxCell():
+			print(currPlayer.getName(),"moved from",oldPos,"to",newPos,"dice =",diceJump)
+			currPlayer.setPostion(newPos)
+
+		else:
+			currPlayer.setPostion(newPos)
+			currPlayer.setFinished(True)
+			print(currPlayer.getName(),"won the game by moving from",oldPos,"to",newPos,"dice =",diceJump)
+			self.numberOfPlayersWon += 1
+
 
 	def play(self,board,dice):
 
@@ -175,29 +199,9 @@ class GameManager(AbstractGameManager):
 
 		currPlayer = self.playerCountToObject[self.turn]
 
-		diceJump = dice.roll()
-
 		if currPlayer.getFinished() == False:
 
-			newPos = currPlayer.getPosition() + diceJump
-			oldPos = currPlayer.getPosition()
-
-			if newPos in board.getSpecialMoves():
-				newPos = board.getSpecialMoves()[newPos]
-
-			if newPos > board.getMaxCell(): 
-				print("Invalid move try again!")
-				return
-
-			elif newPos < board.getMaxCell():
-				print(currPlayer.getName(),"moved from",oldPos,"to",newPos,"dice =",diceJump)
-				currPlayer.setPostion(newPos)
-
-			else:
-				currPlayer.setPostion(newPos)
-				currPlayer.setFinished(True)
-				print(currPlayer.getName(),"won the game by moving from",oldPos,"to",newPos,"dice =",diceJump)
-				self.numberOfPlayersWon += 1
+			self.move(currPlayer,board,dice)
 
 		self.allPlayersWon()
 		self.turn = (self.turn + 1) % len(self.playerCountToObject)
@@ -227,4 +231,3 @@ gameManager.play(board,dice)
 gameManager.play(board,dice)
 gameManager.play(board,dice)
 gameManager.play(board,dice)
-
