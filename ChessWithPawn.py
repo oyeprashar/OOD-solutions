@@ -222,7 +222,7 @@ class GameManager(AbstractGameManager):
 		if currPlayerColor == "white":
 
 			# more than one jump
-			if toRow < fromRow or toRow - fromRow > 1 or abs(toCol - fromCol) > 1:
+			if toRow < fromRow or toRow - fromRow > 1 or abs(toCol - fromCol) > 1 or toRow == fromRow:
 				return False
 
 			# validating the forward move
@@ -236,7 +236,7 @@ class GameManager(AbstractGameManager):
 		elif currPlayerColor == "black":
 
 			# more than one jump
-			if toRow > fromRow or toRow - fromRow > 1 or abs(toCol - fromCol) > 1:
+			if toRow > fromRow or toRow - fromRow > 1 or abs(toCol - fromCol) > 1 or toRow == fromRow:
 				return False
 
 			# validating the forward move
@@ -286,7 +286,6 @@ board = Board(8)
 gameManager = GameManager()
 gameManager.registerPlayer("Shubham","white")
 gameManager.registerPlayer("Shikha","Black")
-
 gameManager.play(1,0,2,0,board)
 # gameManager.play(1,0,2,0,board)
 gameManager.play(2,2,3,3,board)
