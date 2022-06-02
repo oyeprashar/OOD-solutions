@@ -147,7 +147,7 @@ class GameManager(AbstractGameManager):
         print("----------------------------------")
 
 
-    def findWinner(self,board):
+    def findWinner(self,board,symbol):
 
         """
         Things to check
@@ -156,71 +156,50 @@ class GameManager(AbstractGameManager):
         3. Both the diagonals
         """
 
-        allOccupied = True
+        grid = board.getMat()
 
-        for i in range(len(board.getMat())):
-            currRow = ""
-            for j in range(len(board.getMat()[0])):
-                currRow += str(board.getMat()[i][j])
+        winningSeq = len(grid) * symbol
 
-                if board.getMat()[i][j] == -1:
-                    allOccupied = False
-
-            if currRow == 3*'X':
-                return True,'X'
-
-            elif currRow == 3*'O':
-                return True,'O'
+        mainDia = ""
 
 
-        for j in range(len(board.getMat()[0])):
-            currCol = []
-            for i in range(len(board.getMat())):
+        for i in range(len(grid)):
 
-                currCol += str(board.getMat()[i][j])
+            currRow = grid[i]
+            currRowStr = "".join(ithRow)
+            currColStr = ""
 
-            if currCol == 3*'X':
-                return True,'X'
+            for j in range(len(grid)):
+                currColStr += grid[i][j]
 
-            elif currCol == 3*'O':
-                return True,'O'
+                if i == j:
+                    mainDia += grid[i][j]
 
-        if allOccupied == True:
-            True,None
+            if currRowStr == winningSeq:
+                return True
 
-        # checking the principle diagonal
-        index = 0
-        principleDia = ""
-        while index < board.getSize():
-            principleDia += str(board.getMat()[index][index])
-            index += 1
+            elif currCol == winningSeq:
+                return True
 
-        if principleDia == 3*'X':
-            return True,'X'
 
-        elif principleDia == 3*'O':
-            return True,'O'
+        if mainDia == winningSeq:
+            return True
 
-        # checking the other dia
         i = 0
-        j = board.getSize() - 1
+        j = len(grid)
         otherDia = ""
 
-        while i < board.getSize() and j >= 0:
-
-            otherDia += str(board.getMat()[i][j])
+        while i < len(grid) and j >= 0:
+            otherDia += grid[i][j]
             i += 1
             j -= 1
 
+        if otherDia == winningSeq:
+            return True
 
-        if otherDia == 3*'X':
-            return True,'X'
+        return False
 
-        elif otherDia == 3*'O':
-            return True,'O'
-
-        return False,None
-
+       
     def play(self,i,j,board):
 
         if GameManager.player1 == None or GameManager.player2 == None:
@@ -235,18 +214,21 @@ class GameManager(AbstractGameManager):
 
         self.makeMove(i,j,board)
         self.printBoard(board)
-        winnerFound,sym = self.findWinner(board)
 
-        if winnerFound == True:
+        isPlayer1Winner = self.findWinner(board,'X')
+        isPlayer2Winner = self.findWinner(board,'O')
 
-            if sym == None:
+        if isPlayer1Winner == True or isPlayer2Winner == True:
+
+            if isPlayer1Winner == isPlayer2Winner == True:
                 print("It was a tie")
 
-            elif sym == 'X':
+            elif isPlayer1Winner == True:
                 print(GameManager.player1.getName(),"won the match!")
 
-            else:
+            elif isPlayer2Winner == True:
                 print(GameManager.player2.getName(),"won the match!")
+
 
             GameManager.flag = 0
             board.initializeMat()
