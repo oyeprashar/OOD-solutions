@@ -21,6 +21,8 @@
 4. Refining
 """
 
+# We can use the factory design pattern if we know all the types of the Rooms
+
 from abc import ABC, abstractmethod
 
 class Room:
