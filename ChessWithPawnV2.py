@@ -122,6 +122,9 @@ class Player:
 	def getCollectedPieces(self):
 		return self.collectedPieces
 
+	def addCollectedPiece(self,pieceObj):
+		self.collectedPieces.append(pieceObj)
+
 	def reset(self):
 		self.collectedPieces = []
 
@@ -198,20 +201,50 @@ class ChessGameProcessor(AbstractGameProcessor):
 		else:
 			print("Invalid color selection")
 
+	def validatePieceMove(self,i,j,p,q,piece,currPlayer):
+
+		if isinstance(piece,Pawn):
+
+			# checking if the move is forward
+			if p = i + 1 and q = j:
+				if ChessGameProcessor.boardObj.getGrid()[p][q] != None:
+					return False
+
+				else:
+					return True
+
+			# checking for diagonal moves
+			elif (p = i + 1 and q = j - 1) or (p = i + 1 and q = j + 1) :
+
+				if ChessGameProcessor.boardObj.getGrid()[p][q] == None:
+					return True
+
+				else:
+					if ChessGameProcessor.boardObj.getGrid()[p][q].getColor() == currPlayer.getColor():
+						return False
+
+					else:
+						return True
 
 	def isValid(self,i,j,p,q,currPlayer):
 
-		if ChessGameProcessor.boardObj == None:
+
+		size = ChessGameProcessor.boardObj.getSize()
+
+		if i < 0 or j < 0 or p < 0 or q < 0 or i >= size or j >= size or p >= size or q >= size:
+			return False
+
+		if ChessGameProcessor.boardObj == None :
 			print("No board registered!")
 			return
 
-		if self.boardObj.getGrid()[i][j] == None:
+		if ChessGameProcessor.boardObj.getGrid()[i][j] == None:
 			return False
 
-		if self.boardObj.getGrid()[i][j].getColor() != currPlayer.getColor():
+		if ChessGameProcessor.boardObj.getGrid()[i][j].getColor() != currPlayer.getColor():
 			return False
 
-		if self.validatePieceMove(i,j,p,q,self.boardObj.getGrid()[i][j]) == False:
+		if ChessGameProcessor.validatePieceMove(i,j,p,q,ChessGameProcessor.boardObj.getGrid()[i][j],currPlayer) == False:
 			return False
 
 		return True
@@ -227,6 +260,7 @@ class ChessGameProcessor(AbstractGameProcessor):
 		if self.isValid(i,j,p,q,currPlayer) == True:
 
 			piece = self.boardObj.getGrid()[i][j]
+			currPlayer.addCollectedPiece(piece)
 			ChessGameProcessor.boardObj.getGrid()[i][j] = None
 			ChessGameProcessor.boardObj.getGrid()[p][q] = piece
 
@@ -239,11 +273,3 @@ class ChessGameProcessor(AbstractGameProcessor):
 		ChessGameProcessor.boardObj.reset()
 		ChessGameProcessor.players = None
 		ChessGameProcessor.count = 0
-
-
-
-
-
-
-
-
