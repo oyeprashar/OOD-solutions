@@ -206,7 +206,7 @@ class ChessGameProcessor(AbstractGameProcessor):
 		if isinstance(piece,Pawn):
 
 			# checking if the move is forward
-			if p = i + 1 and q = j:
+			if p == i + 1 and q == j:
 				if ChessGameProcessor.boardObj.getGrid()[p][q] != None:
 					return False
 
@@ -214,7 +214,7 @@ class ChessGameProcessor(AbstractGameProcessor):
 					return True
 
 			# checking for diagonal moves
-			elif (p = i + 1 and q = j - 1) or (p = i + 1 and q = j + 1) :
+			elif (p == i + 1 and q == j - 1) or (p == i + 1 and q == j + 1) :
 
 				if ChessGameProcessor.boardObj.getGrid()[p][q] == None:
 					return True
@@ -273,3 +273,5 @@ class ChessGameProcessor(AbstractGameProcessor):
 		ChessGameProcessor.boardObj.reset()
 		ChessGameProcessor.players = None
 		ChessGameProcessor.count = 0
+
+processor = ChessGameProcessor()
